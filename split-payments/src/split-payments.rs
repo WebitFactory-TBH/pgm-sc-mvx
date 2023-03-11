@@ -2,6 +2,8 @@
 #![no_main]
 #![allow(unused_attributes)]
 
+use multiversx_sc::types::heap::String;
+
 multiversx_sc::imports!();
 multiversx_sc::derive_imports!();
 

@@ -55,19 +55,11 @@
                 "to": "sc:split-payments",
                 "function": "createPaymentLink",
                 "arguments": [
-                    [                    
-                        {
-                            "0-amount": "biguint:100",
-                            "1-destination": "address:carol"
-                        },
-                        {
-                            "0-amount": "biguint:200",
-                            "1-destination": "address:bob"
-                        },
-                        {
-                            "0-amount": "biguint:300",
-                            "1-destination": "address:carol"
-                        }
+                    [       
+                        "str:clf4arlga00019cs16qhm7w8d",   
+                        [         
+                            "biguint:100|address:carol"
+                        ]
                     ]
                 ],
                 "value": "0",
@@ -75,9 +67,6 @@
                 "gasPrice": "0"
             },
             "expect": {
-                "out": [
-                    "1"
-                ],
                 "status": "",
                 "gas": "*",
                 "refund": "*"
@@ -90,7 +79,7 @@
                 "to": "sc:split-payments",
                 "function": "getRequiredAmount",
                 "arguments": [
-                    "1"
+                    "str:clf4arlga00019cs16qhm7w8d"
                 ]
             },
             "expect": {
