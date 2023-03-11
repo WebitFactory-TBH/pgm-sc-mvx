@@ -1,0 +1,155 @@
+{
+    "name": "split-payments",
+    "steps": [
+        {
+            "step": "setState",
+            "accounts": {
+                "address:owner": {
+                    "nonce": "1",
+                    "balance": "0"
+                },
+                "address:alice": {
+                    "nonce": "0",
+                    "balance": "1000"
+                },
+                "address:bob": {
+                    "nonce": "0",
+                    "balance": "1000"
+                },
+                "address:carol": {
+                    "nonce": "0",
+                    "balance": "0"
+                }
+            },
+            "newAddresses": [
+                {
+                    "creatorAddress": "address:owner",
+                    "creatorNonce": "1",
+                    "newAddress": "sc:split-payments"
+                }
+            ]
+        },
+        {
+            "step": "scDeploy",
+            "id": "deploy",
+            "tx": {
+                "from": "address:owner",
+                "contractCode": "file:../output/split-payments.wasm",
+                "arguments": [],
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "logs": [],
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "id": "create link",
+            "tx": {
+                "from": "address:bob",
+                "to": "sc:split-payments",
+                "function": "createPaymentLink",
+                "arguments": [
+                    [                    
+                        {
+                            "0-amount": "biguint:100",
+                            "1-destination": "address:carol"
+                        },
+                        {
+                            "0-amount": "biguint:200",
+                            "1-destination": "address:bob"
+                        },
+                        {
+                            "0-amount": "biguint:300",
+                            "1-destination": "address:carol"
+                        }
+                    ]
+                ],
+                "value": "0",
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [
+                    "1"
+                ],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scQuery",
+            "id": "get payment amount",
+            "tx": {
+                "to": "sc:split-payments",
+                "function": "getRequiredAmount",
+                "arguments": [
+                    "1"
+                ]
+            },
+            "expect": {
+                "out": [
+                    "606"
+                ],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "id": "pay",
+            "tx": {
+                "from": "address:alice",
+                "to": "sc:split-payments",
+                "function": "completePayment",
+                "arguments": [
+                    "1"
+                ],
+                "value": "620",
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "checkState",
+            "accounts": {
+                "address:owner": {
+                    "nonce": "2",
+                    "balance": "0"
+                },
+                "address:alice": {
+                    "nonce": "1",
+                    "balance": "394"
+                },
+                "address:bob": {
+                    "nonce": "1",
+                    "balance": "1200"
+                },
+                "address:carol": {
+                    "nonce": "0",
+                    "balance": "400"
+                },
+                "sc:split-payments": {
+                    "nonce": "0",
+                    "balance": "6",
+                    "storage": "*",
+                    "owner": "address:owner",
+                    "code": "file:../output/split-payments.wasm"
+                }
+            }
+        }
+    ]
+}
