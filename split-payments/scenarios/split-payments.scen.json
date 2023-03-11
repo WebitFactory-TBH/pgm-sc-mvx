@@ -54,16 +54,25 @@
                 "from": "address:bob",
                 "to": "sc:split-payments",
                 "function": "createPaymentLink",
-                "arguments": [
-                    [       
-                        "str:clf4arlga00019cs16qhm7w8d",   
-                        [         
-                            "biguint:100|address:carol"
-                        ]
+                "arguments": [      
+                    "str:clf4arlga00019cs16qhm7w8d", 
+                    [
+                        {
+                            "0-amount": "biguint:300",
+                            "1-address": "address:carol"
+                        },
+                        {
+                            "0-amount": "biguint:200",
+                            "1-address": "address:bob"
+                        },
+                        {
+                            "0-amount": "biguint:100",
+                            "1-address": "address:carol"
+                        }
                     ]
                 ],
                 "value": "0",
-                "gasLimit": "5,000,000",
+                "gasLimit": "10,000,000",
                 "gasPrice": "0"
             },
             "expect": {
@@ -99,7 +108,7 @@
                 "to": "sc:split-payments",
                 "function": "completePayment",
                 "arguments": [
-                    "1"
+                    "str:clf4arlga00019cs16qhm7w8d"
                 ],
                 "value": "620",
                 "gasLimit": "5,000,000",
